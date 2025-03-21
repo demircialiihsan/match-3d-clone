@@ -1477,9 +1477,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6e25a428202a94786e057af17702f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 4753596917107724250, guid: 155c9f58b6d72c749afefacc7bf47399, type: 3}
-  - {fileID: 4753596917107724250, guid: d3ea6a97897b5284fadd88127895c702, type: 3}
+  items:
+  - {fileID: 255095381807587874, guid: 155c9f58b6d72c749afefacc7bf47399, type: 3}
+  - {fileID: 255095381807587874, guid: d3ea6a97897b5284fadd88127895c702, type: 3}
   objectCount: 100
   width: 4
   height: 6

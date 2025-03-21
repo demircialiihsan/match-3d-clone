@@ -6,7 +6,7 @@ namespace Game.Gameplay.PlaygroundBase
 {
     public class Playground : MonoBehaviour
     {
-        [SerializeField] GameObject[] objects;
+        [SerializeField] Item[] items;
         [SerializeField] int objectCount;
         [SerializeField] float width, height;
         [SerializeField] MatchBoard matchBoard;
@@ -16,7 +16,9 @@ namespace Game.Gameplay.PlaygroundBase
         {
             for (int i = 0; i < objectCount; i++)
             {
-                Instantiate(GetRandomObject(), GetRandomPosition(), Random.rotation, transform);
+                var itemPrefab = GetRandomItemPrefab();
+                var item = GetRandomItem(itemPrefab);
+                item.Prepare(itemPrefab.GetInstanceID(), ReleaseItem);
             }
         }
 
@@ -31,9 +33,19 @@ namespace Game.Gameplay.PlaygroundBase
             matchBoard.PlaceItem(item);
         }
 
-        GameObject GetRandomObject()
+        Item GetRandomItemPrefab()
         {
-            return objects[Random.Range(0, objects.Length)];
+            return items[Random.Range(0, items.Length)];
+        }
+
+        IItem GetRandomItem(Item itemPrefab)
+        {
+            return Instantiate(itemPrefab, GetRandomPosition(), Random.rotation, transform);
+        }
+
+        void ReleaseItem(IItem item)
+        {
+            Destroy((item as Item).gameObject);
         }
 
         Vector3 GetRandomPosition()
