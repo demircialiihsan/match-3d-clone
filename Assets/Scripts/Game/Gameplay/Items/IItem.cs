@@ -11,8 +11,8 @@ namespace Game.Gameplay.Items
 
         void Dispose();
 
-        void DisablePhysics();
+        void MoveToMatchBoard(Vector3 position, Quaternion rotation);
 
-        void MoveToPositionAndRotation(Vector3 position, Quaternion rotation);
+        void RepositionOnMatchBoard(Vector3 position);
     }
 }

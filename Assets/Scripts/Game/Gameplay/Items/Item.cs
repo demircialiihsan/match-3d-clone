@@ -1,4 +1,4 @@
-using DG.Tweening;
+using Game.Gameplay.Items.Internal;
 using System;
 using UnityEngine;
 
@@ -6,7 +6,9 @@ namespace Game.Gameplay.Items
 {
     public class Item : MonoBehaviour, IItem
     {
+        [SerializeField] MoveAnimation moveAnimation;
         [SerializeField] Rigidbody rb;
+        [SerializeField] Collider col;
 
         int id;
         Action<IItem> disposer;
@@ -19,19 +21,26 @@ namespace Game.Gameplay.Items
             this.disposer = disposer;
         }
 
-        public void DisablePhysics()
+        public void MoveToMatchBoard(Vector3 position, Quaternion rotation)
         {
-            rb.isKinematic = true;
+            moveAnimation.MoveToPositionAndRotation(position, rotation);
+            DisablePhysics();
         }
 
-        public void MoveToPositionAndRotation(Vector3 position, Quaternion rotation)
+        public void RepositionOnMatchBoard(Vector3 position)
         {
-            transform.SetPositionAndRotation(position, rotation);
+            moveAnimation.Reposition(position);
         }
 
         public void Dispose()
         {
             disposer?.Invoke(this);
+        }
+
+        void DisablePhysics()
+        {
+            rb.isKinematic = true;
+            col.enabled = false;
         }
     }
 }

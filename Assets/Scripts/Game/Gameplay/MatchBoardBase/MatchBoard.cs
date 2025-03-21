@@ -48,8 +48,7 @@ namespace Game.Gameplay.MatchBoardBase
         void InsertItem(IItem item, int index)
         {
             var slot = slots[index];
-            item.MoveToPositionAndRotation(slot.position, slot.rotation);
-            item.DisablePhysics();
+            item.MoveToMatchBoard(slot.position, slot.rotation);
 
             items.Insert(index, item);
             RepositionItems(index + 1);
@@ -83,7 +82,7 @@ namespace Game.Gameplay.MatchBoardBase
             for (int i = index; i < items.Count; i++)
             {
                 var slot = slots[i];
-                items[i].MoveToPositionAndRotation(slot.position, slot.rotation);
+                items[i].RepositionOnMatchBoard(slot.position);
             }
         }
     }
