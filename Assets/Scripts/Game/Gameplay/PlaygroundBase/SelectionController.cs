@@ -1,13 +1,14 @@
+using Game.Gameplay.Items;
 using Game.Gameplay.Mechanics;
 using UnityEngine;
 
 namespace Game.Gameplay.PlaygroundBase
 {
-    public class TouchController : MonoBehaviour
+    public class SelectionController : MonoBehaviour
     {
         [SerializeField] TouchDetector touchDetector;
         [SerializeField] Camera gameCamera;
-        [SerializeField] Transform target;
+        [SerializeField] Playground playground;
 
         void Start()
         {
@@ -21,13 +22,11 @@ namespace Game.Gameplay.PlaygroundBase
 
         void OnTouchEnded(Vector2 touchPosition)
         {
-            if (Physics.Raycast(gameCamera.ScreenPointToRay(touchPosition), out RaycastHit hit))
+            if (Physics.Raycast(gameCamera.ScreenPointToRay(touchPosition), out var hit))
             {
-                if (hit.collider.gameObject.TryGetComponent(out Rigidbody rb))
+                if (hit.rigidbody != null && hit.rigidbody.TryGetComponent(out IItem item))
                 {
-                    rb.isKinematic = true;
-                    hit.collider.transform.SetParent(target);
-                    hit.collider.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                    playground.OnItemSelected(item);
                 }
             }
         }

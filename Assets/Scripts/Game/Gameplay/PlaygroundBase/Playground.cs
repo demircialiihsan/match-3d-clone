@@ -1,3 +1,5 @@
+using Game.Gameplay.Items;
+using Game.Gameplay.MatchBoardBase;
 using UnityEngine;
 
 namespace Game.Gameplay.PlaygroundBase
@@ -7,6 +9,7 @@ namespace Game.Gameplay.PlaygroundBase
         [SerializeField] GameObject[] objects;
         [SerializeField] int objectCount;
         [SerializeField] float width, height;
+        [SerializeField] MatchBoard matchBoard;
         [SerializeField] Transform walls;
 
         void Start()
@@ -21,6 +24,11 @@ namespace Game.Gameplay.PlaygroundBase
         {
             if (walls)
                 walls.localScale = new Vector3(width, 1, height);
+        }
+
+        public void OnItemSelected(IItem item)
+        {
+            matchBoard.PlaceItem(item);
         }
 
         GameObject GetRandomObject()
