@@ -1,4 +1,5 @@
 using Game.Gameplay.Items;
+using Game.Gameplay.MatchBoardBase.Internal;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -93,16 +94,37 @@ namespace Game.Gameplay.MatchBoardBase
         {
             if (matchFlaggedItems.TryGetValue(item, out var matches))
             {
-                foreach (var match in matches)
-                {
-                    items.Remove(match);
-                    match.Dispose();
-                }
-                items.Remove(item);
-                item.Dispose();
+                matches.Add(item);
+                MatchItems(matches);
 
                 matchFlaggedItems.Remove(item);
-                RepositionItems();
+            }
+        }
+
+        void MatchItems(List<IItem> matchingItems)
+        {
+            var matchPosition = MatchBoardUtility.CalculateMatchPosition(matchingItems);
+
+            for (int i = 0; i < matchingItems.Count; i++)
+            {
+                var item = matchingItems[i];
+
+                items.Remove(item);
+
+                if (i == 0)
+                    item.MoveToMatchTarget(matchPosition, OnMatchComplete);
+                else
+                    item.MoveToMatchTarget(matchPosition);
+            }
+
+            RepositionItems();
+
+            void OnMatchComplete()
+            {
+                foreach (var match in matchingItems)
+                {
+                    match.Dispose();
+                }
             }
         }
 

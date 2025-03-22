@@ -34,6 +34,11 @@ namespace Game.Gameplay.Items
             moveAnimation.Reposition(position);
         }
 
+        public void MoveToMatchTarget(Vector3 position, Action onMoveComplete = null)
+        {
+            moveAnimation.MoveToMatchTarget(position, onMoveComplete);
+        }
+
         public void Dispose()
         {
             disposer?.Invoke(this);

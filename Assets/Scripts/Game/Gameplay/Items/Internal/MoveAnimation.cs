@@ -9,6 +9,7 @@ namespace Game.Gameplay.Items.Internal
         const float rotateDuration = 0.2f;
         const float moveDuration = 0.5f;
         const float repositionDuration = 0.2f;
+        const float matchMoveDuration = 0.2f;
 
         Tween rotateTween;
         Sequence moveSequence;
@@ -46,6 +47,19 @@ namespace Game.Gameplay.Items.Internal
 
             repositionTween.Kill();
             repositionTween = transform.DOMove(position, repositionDuration).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                moveCompleteHandler?.Invoke();
+            });
+        }
+
+        public void MoveToMatchTarget(Vector3 position, Action moveCompleteHandler)
+        {
+            if (moveSequence.IsActive())
+                moveSequence.Kill();
+
+            repositionTween.Kill();
+
+            transform.DOMove(position, matchMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 moveCompleteHandler?.Invoke();
             });

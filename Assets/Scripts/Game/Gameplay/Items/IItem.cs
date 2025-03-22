@@ -5,6 +5,8 @@ namespace Game.Gameplay.Items
 {
     public interface IItem
     {
+        Transform transform { get; }
+
         int ID { get; }
 
         bool MatchFlagged { get; set; }
@@ -16,5 +18,7 @@ namespace Game.Gameplay.Items
         void MoveToMatchBoard(Vector3 position, Quaternion rotation, Action onMoveComplete = null);
 
         void RepositionOnMatchBoard(Vector3 position);
+
+        void MoveToMatchTarget(Vector3 position, Action onMoveComplete = null);
     }
 }
