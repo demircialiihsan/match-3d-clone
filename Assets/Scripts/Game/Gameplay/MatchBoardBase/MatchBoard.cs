@@ -9,11 +9,13 @@ namespace Game.Gameplay.MatchBoardBase
     public class MatchBoard : MonoBehaviour
     {
         const int matchCount = 3;
+        const int itemCapacity = 7;
 
         [SerializeField] Transform[] slots;
 
         List<IItem> items;
         Dictionary<IItem, List<IItem>> matchFlaggedItems;
+        int unmatchedItemCount;
 
         void Awake()
         {
@@ -26,12 +28,20 @@ namespace Game.Gameplay.MatchBoardBase
             if (HasUnmatchedItemOfSameType(item.ID, out var newItemIndex))
             {
                 InsertItem(item, newItemIndex, OnItemInserted);
-                TryMatchFlagItems(item, newItemIndex);
+
+                if (!TryMatchFlagItems(item, newItemIndex))
+                    unmatchedItemCount++;
             }
             else
             {
                 newItemIndex = items.Count;
                 InsertItem(item, newItemIndex);
+                unmatchedItemCount++;
+            }
+
+            if (unmatchedItemCount == itemCapacity)
+            {
+                Debug.Log("Fail! Matchboard is full");
             }
         }
 
@@ -63,10 +73,10 @@ namespace Game.Gameplay.MatchBoardBase
             RepositionItems(index + 1);
         }
 
-        void TryMatchFlagItems(IItem completingItem, int newItemIndex)
+        bool TryMatchFlagItems(IItem completingItem, int newItemIndex)
         {
             if (newItemIndex < matchCount - 1)
-                return;
+                return false;
 
             int i = newItemIndex;
 
@@ -75,7 +85,7 @@ namespace Game.Gameplay.MatchBoardBase
                 var previousItem = items[i - 1];
 
                 if (previousItem.ID != completingItem.ID || previousItem.MatchFlagged)
-                    return;
+                    return false;
                 i--;
             }
 
@@ -85,9 +95,11 @@ namespace Game.Gameplay.MatchBoardBase
             foreach (var item in otherMatches)
             {
                 item.MatchFlagged = true;
+                unmatchedItemCount--;
             }
 
             matchFlaggedItems[completingItem] = otherMatches;
+            return true;
         }
 
         void OnItemInserted(IItem item)
