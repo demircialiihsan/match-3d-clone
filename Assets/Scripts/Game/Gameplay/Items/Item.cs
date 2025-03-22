@@ -15,15 +15,17 @@ namespace Game.Gameplay.Items
 
         public int ID => id;
 
+        public bool MatchFlagged { get; set; }
+
         public void Prepare(int id, Action<IItem> disposer)
         {
             this.id = id;
             this.disposer = disposer;
         }
 
-        public void MoveToMatchBoard(Vector3 position, Quaternion rotation)
+        public void MoveToMatchBoard(Vector3 position, Quaternion rotation, Action onMoveComplete = null)
         {
-            moveAnimation.MoveToPositionAndRotation(position, rotation);
+            moveAnimation.MoveToPositionAndRotation(position, rotation, onMoveComplete);
             DisablePhysics();
         }
 

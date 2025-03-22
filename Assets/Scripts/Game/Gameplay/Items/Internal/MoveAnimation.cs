@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace Game.Gameplay.Items.Internal
@@ -13,6 +14,8 @@ namespace Game.Gameplay.Items.Internal
         Sequence moveSequence;
         Tween repositionTween;
 
+        Action moveCompleteHandler;
+
         void OnDestroy()
         {
             rotateTween.Kill();
@@ -20,7 +23,7 @@ namespace Game.Gameplay.Items.Internal
             repositionTween.Kill();
         }
 
-        public void MoveToPositionAndRotation(Vector3 position, Quaternion rotation)
+        public void MoveToPositionAndRotation(Vector3 position, Quaternion rotation, Action moveCompleteHandler = null)
         {
             rotateTween = transform.DORotateQuaternion(rotation, rotateDuration).SetEase(Ease.OutSine);
 
@@ -28,6 +31,12 @@ namespace Game.Gameplay.Items.Internal
             moveSequence.Join(transform.DOMoveX(position.x, moveDuration).SetEase(Ease.OutSine));
             moveSequence.Join(transform.DOMoveY(position.y, moveDuration).SetEase(Ease.OutBack));
             moveSequence.Join(transform.DOMoveZ(position.z, moveDuration).SetEase(Ease.OutSine));
+
+            this.moveCompleteHandler = moveCompleteHandler;
+            moveSequence.AppendCallback(() =>
+            {
+                this.moveCompleteHandler?.Invoke();
+            });
         }
 
         public void Reposition(Vector3 position)
@@ -36,7 +45,10 @@ namespace Game.Gameplay.Items.Internal
                 moveSequence.Kill();
 
             repositionTween.Kill();
-            repositionTween = transform.DOMove(position, repositionDuration).SetEase(Ease.OutSine);
+            repositionTween = transform.DOMove(position, repositionDuration).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                moveCompleteHandler?.Invoke();
+            });
         }
     }
 }

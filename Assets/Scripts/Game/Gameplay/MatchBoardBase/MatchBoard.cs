@@ -1,4 +1,5 @@
 using Game.Gameplay.Items;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,18 +12,20 @@ namespace Game.Gameplay.MatchBoardBase
         [SerializeField] Transform[] slots;
 
         List<IItem> items;
+        Dictionary<IItem, List<IItem>> matchFlaggedItems;
 
         void Awake()
         {
             items = new();
+            matchFlaggedItems = new();
         }
 
         public void PlaceItem(IItem item)
         {
-            if (HasItemOfSameType(item.ID, out var newItemIndex))
+            if (HasUnmatchedItemOfSameType(item.ID, out var newItemIndex))
             {
-                InsertItem(item, newItemIndex);
-                TryMatchItems(item.ID, newItemIndex);
+                InsertItem(item, newItemIndex, OnItemInserted);
+                TryMatchFlagItems(item, newItemIndex);
             }
             else
             {
@@ -31,13 +34,15 @@ namespace Game.Gameplay.MatchBoardBase
             }
         }
 
-        bool HasItemOfSameType(int id, out int newPlacementIndex)
+        bool HasUnmatchedItemOfSameType(int id, out int newPlacementIndex)
         {
             newPlacementIndex = items.Count;
 
             while (newPlacementIndex > 0)
             {
-                if (items[newPlacementIndex - 1].ID == id)
+                var previousItem = items[newPlacementIndex - 1];
+
+                if (!previousItem.MatchFlagged && previousItem.ID == id)
                     return true;
 
                 newPlacementIndex--;
@@ -45,16 +50,19 @@ namespace Game.Gameplay.MatchBoardBase
             return false;
         }
 
-        void InsertItem(IItem item, int index)
+        void InsertItem(IItem item, int index, Action<IItem> onItemInsert = null)
         {
             var slot = slots[index];
-            item.MoveToMatchBoard(slot.position, slot.rotation);
+            item.MoveToMatchBoard(slot.position, slot.rotation, () =>
+            {
+                onItemInsert?.Invoke(item);
+            });
 
             items.Insert(index, item);
             RepositionItems(index + 1);
         }
 
-        void TryMatchItems(int id, int newItemIndex)
+        void TryMatchFlagItems(IItem completingItem, int newItemIndex)
         {
             if (newItemIndex < matchCount - 1)
                 return;
@@ -63,23 +71,44 @@ namespace Game.Gameplay.MatchBoardBase
 
             for (int m = 0; m < matchCount - 1; m++)
             {
-                if (items[i - 1].ID != id)
+                var previousItem = items[i - 1];
+
+                if (previousItem.ID != completingItem.ID || previousItem.MatchFlagged)
                     return;
                 i--;
             }
 
-            var matches = items.GetRange(i, matchCount);
+            var otherMatches = items.GetRange(i, matchCount - 1);
 
-            foreach (var item in matches)
-                item.Dispose();
+            completingItem.MatchFlagged = true;
+            foreach (var item in otherMatches)
+            {
+                item.MatchFlagged = true;
+            }
 
-            items.RemoveRange(i, matchCount);
-            RepositionItems(i);
+            matchFlaggedItems[completingItem] = otherMatches;
         }
 
-        void RepositionItems(int index)
+        void OnItemInserted(IItem item)
         {
-            for (int i = index; i < items.Count; i++)
+            if (matchFlaggedItems.TryGetValue(item, out var matches))
+            {
+                foreach (var match in matches)
+                {
+                    items.Remove(match);
+                    match.Dispose();
+                }
+                items.Remove(item);
+                item.Dispose();
+
+                matchFlaggedItems.Remove(item);
+                RepositionItems();
+            }
+        }
+
+        void RepositionItems(int startIndex = 0)
+        {
+            for (int i = startIndex; i < items.Count; i++)
             {
                 var slot = slots[i];
                 items[i].RepositionOnMatchBoard(slot.position);
