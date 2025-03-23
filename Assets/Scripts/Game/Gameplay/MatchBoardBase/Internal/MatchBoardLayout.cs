@@ -8,11 +8,18 @@ namespace Game.Gameplay.MatchBoardBase.Internal
         [SerializeField] float cellWidth;
         [SerializeField] float cellHeight;
         [SerializeField] float spacing;
+        [Space]
+        [SerializeField] float itemPlacementOffset;
+        [SerializeField] float matchPositionOffset;
 
         Transform selfTransform;
         float firstCellPosX;
 
         public Quaternion Rotation => selfTransform.rotation;
+
+        public Vector3 MatchOffset => selfTransform.up * matchPositionOffset;
+
+        Vector3 PlacementOffset => -selfTransform.forward * itemPlacementOffset;
 
         void Awake()
         {
@@ -52,7 +59,7 @@ namespace Game.Gameplay.MatchBoardBase.Internal
 
         public Vector3 CalculateCellPosition(int index)
         {
-            return selfTransform.TransformPoint(CalculateCellLocalPosition(index));
+            return selfTransform.TransformPoint(CalculateCellLocalPosition(index)) + PlacementOffset;
         }
 
         Vector2 CalculateCellLocalPosition(int index)

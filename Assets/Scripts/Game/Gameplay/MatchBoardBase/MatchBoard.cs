@@ -127,7 +127,7 @@ namespace Game.Gameplay.MatchBoardBase
 
         void MatchItems(List<IItem> matchingItems)
         {
-            var matchPosition = MatchBoardUtility.CalculateMatchPosition(matchingItems);
+            var matchPosition = MatchBoardUtility.CalculateMatchPosition(matchingItems, layout.MatchOffset);
 
             for (int i = 0; i < matchingItems.Count; i++)
             {

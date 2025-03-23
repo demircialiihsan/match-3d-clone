@@ -9,7 +9,7 @@ namespace Game.Gameplay.Items.Internal
         const float rotateDuration = 0.2f;
         const float moveDuration = 0.5f;
         const float repositionDuration = 0.2f;
-        const float matchMoveDuration = 0.2f;
+        const float matchMoveDuration = 0.25f;
 
         Tween rotateTween;
         Sequence moveSequence;

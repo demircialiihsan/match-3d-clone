@@ -1312,6 +1312,8 @@ MonoBehaviour:
   cellWidth: 148
   cellHeight: 148
   spacing: 0
+  itemPlacementOffset: 0.1
+  matchPositionOffset: 0.6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

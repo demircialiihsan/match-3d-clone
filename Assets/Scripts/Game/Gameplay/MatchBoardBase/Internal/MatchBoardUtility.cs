@@ -6,7 +6,7 @@ namespace Game.Gameplay.MatchBoardBase.Internal
 {
     public static class MatchBoardUtility
     {
-        public static Vector3 CalculateMatchPosition(List<IItem> items)
+        public static Vector3 CalculateMatchPosition(List<IItem> items, Vector3 matchOffset)
         {
             var center = Vector3.zero;
 
@@ -15,7 +15,7 @@ namespace Game.Gameplay.MatchBoardBase.Internal
 
             center /= items.Count;
 
-            return center;
+            return center + matchOffset;
         }
     }
 }
