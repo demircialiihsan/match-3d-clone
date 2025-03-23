@@ -173,6 +173,7 @@ GameObject:
   m_Component:
   - component: {fileID: 801648774}
   - component: {fileID: 801648775}
+  - component: {fileID: 801648776}
   m_Layer: 0
   m_Name: MatchBoard
   m_TagString: Untagged
@@ -208,8 +209,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f272f8386ddfd046bb93d56d23b60bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layout: {fileID: 1966596513}
+  layout: {fileID: 801648776}
   childCell: {fileID: 1283082775}
+--- !u!114 &801648776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801648773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e52637d822bde49ae8719606081f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cellsParent: {fileID: 1966596511}
+  cellWidth: 148
+  cellHeight: 148
+  spacing: 0
+  itemPlacementOffset: 0.1
+  matchPositionOffset: 0.6
 --- !u!1 &818827354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1269,7 +1288,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1966596511}
-  - component: {fileID: 1966596513}
   m_Layer: 5
   m_Name: Cells
   m_TagString: Untagged
@@ -1297,23 +1315,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 288}
   m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1966596513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966596510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e52637d822bde49ae8719606081f96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cellWidth: 148
-  cellHeight: 148
-  spacing: 0
-  itemPlacementOffset: 0.1
-  matchPositionOffset: 0.6
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -50,10 +50,8 @@ namespace Game.Gameplay.MatchBoardBase
 
         void CreateCells(int count)
         {
-            var layoutTransform = layout.transform;
-
             for (int i = 1; i < count; i++)
-                Instantiate(childCell, layoutTransform);
+                Instantiate(childCell, layout.CellsParent);
 
             layout.UpdateLayout();
         }

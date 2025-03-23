@@ -5,6 +5,8 @@ namespace Game.Gameplay.MatchBoardBase.Internal
 {
     public class MatchBoardLayout : MonoBehaviour
     {
+        [SerializeField] Transform cellsParent;
+        [Space]
         [SerializeField] float cellWidth;
         [SerializeField] float cellHeight;
         [SerializeField] float spacing;
@@ -12,25 +14,21 @@ namespace Game.Gameplay.MatchBoardBase.Internal
         [SerializeField] float itemPlacementOffset;
         [SerializeField] float matchPositionOffset;
 
-        Transform selfTransform;
         float firstCellPosX;
 
-        public Quaternion Rotation => selfTransform.rotation;
+        public Transform CellsParent => cellsParent;
 
-        public Vector3 MatchOffset => selfTransform.up * matchPositionOffset;
+        public Quaternion Rotation => cellsParent.rotation;
 
-        Vector3 PlacementOffset => -selfTransform.forward * itemPlacementOffset;
+        public Vector3 MatchOffset => cellsParent.up * matchPositionOffset;
 
-        void Awake()
-        {
-            selfTransform = transform;
-        }
+        Vector3 PlacementOffset => -cellsParent.forward * itemPlacementOffset;
 
         public void UpdateLayout()
         {
             var children = new List<RectTransform>();
 
-            foreach (Transform child in transform)
+            foreach (Transform child in cellsParent)
             {
                 if (child.gameObject.activeSelf)
                 {
@@ -59,7 +57,7 @@ namespace Game.Gameplay.MatchBoardBase.Internal
 
         public Vector3 CalculateCellPosition(int index)
         {
-            return selfTransform.TransformPoint(CalculateCellLocalPosition(index)) + PlacementOffset;
+            return cellsParent.TransformPoint(CalculateCellLocalPosition(index)) + PlacementOffset;
         }
 
         Vector2 CalculateCellLocalPosition(int index)
