@@ -11,14 +11,17 @@ namespace Game.Gameplay.MatchBoardBase
         const int matchCount = 3;
         const int itemCapacity = 7;
 
-        [SerializeField] Transform[] slots;
+        [SerializeField] MatchBoardLayout layout;
+        [SerializeField] GameObject childCell;
 
         List<IItem> items;
         Dictionary<IItem, List<IItem>> matchFlaggedItems;
         int unmatchedItemCount;
 
-        void Awake()
+        void Start()
         {
+            CreateCells(itemCapacity);
+
             items = new();
             matchFlaggedItems = new();
         }
@@ -45,6 +48,16 @@ namespace Game.Gameplay.MatchBoardBase
             }
         }
 
+        void CreateCells(int count)
+        {
+            var layoutTransform = layout.transform;
+
+            for (int i = 1; i < count; i++)
+                Instantiate(childCell, layoutTransform);
+
+            layout.UpdateLayout();
+        }
+
         bool HasUnmatchedItemOfSameType(int id, out int newPlacementIndex)
         {
             newPlacementIndex = items.Count;
@@ -63,8 +76,7 @@ namespace Game.Gameplay.MatchBoardBase
 
         void InsertItem(IItem item, int index, Action<IItem> onItemInsert = null)
         {
-            var slot = slots[index];
-            item.MoveToMatchBoard(slot.position, slot.rotation, () =>
+            item.MoveToMatchBoard(layout.CalculateCellPosition(index), layout.Rotation, () =>
             {
                 onItemInsert?.Invoke(item);
             });
@@ -144,8 +156,8 @@ namespace Game.Gameplay.MatchBoardBase
         {
             for (int i = startIndex; i < items.Count; i++)
             {
-                var slot = slots[i];
-                items[i].RepositionOnMatchBoard(slot.position);
+                var position = layout.CalculateCellPosition(i);
+                items[i].RepositionOnMatchBoard(position);
             }
         }
     }
