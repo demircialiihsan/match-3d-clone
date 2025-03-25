@@ -8,7 +8,7 @@ namespace Game.Gameplay.MatchBoardBase
 {
     public class MatchBoard : MonoBehaviour
     {
-        const int matchCount = 3;
+        public const int MatchCount = 3;
         const int itemCapacity = 7;
 
         [SerializeField] MatchBoardLayout layout;
@@ -56,7 +56,7 @@ namespace Game.Gameplay.MatchBoardBase
             layout.UpdateLayout();
         }
 
-        bool HasUnmatchedItemOfSameType(int id, out int newPlacementIndex)
+        bool HasUnmatchedItemOfSameType(string id, out int newPlacementIndex)
         {
             newPlacementIndex = items.Count;
 
@@ -85,12 +85,12 @@ namespace Game.Gameplay.MatchBoardBase
 
         bool TryMatchFlagItems(IItem completingItem, int newItemIndex)
         {
-            if (newItemIndex < matchCount - 1)
+            if (newItemIndex < MatchCount - 1)
                 return false;
 
             int i = newItemIndex;
 
-            for (int m = 0; m < matchCount - 1; m++)
+            for (int m = 0; m < MatchCount - 1; m++)
             {
                 var previousItem = items[i - 1];
 
@@ -99,7 +99,7 @@ namespace Game.Gameplay.MatchBoardBase
                 i--;
             }
 
-            var otherMatches = items.GetRange(i, matchCount - 1);
+            var otherMatches = items.GetRange(i, MatchCount - 1);
 
             completingItem.MatchFlagged = true;
             foreach (var item in otherMatches)

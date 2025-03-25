@@ -1,25 +1,21 @@
+using Game.Gameplay.ItemProviding;
 using Game.Gameplay.Items;
 using Game.Gameplay.MatchBoardBase;
+using Game.Levels;
+using Game.Services;
 using UnityEngine;
 
 namespace Game.Gameplay.PlaygroundBase
 {
     public class Playground : MonoBehaviour
     {
-        [SerializeField] Item[] items;
-        [SerializeField] int objectCount;
         [SerializeField] float width, height;
         [SerializeField] MatchBoard matchBoard;
         [SerializeField] Transform walls;
 
-        void Start()
+        public void Prepare(ItemsInfo itemsInfo, int matchCount)
         {
-            for (int i = 0; i < objectCount; i++)
-            {
-                var itemPrefab = GetRandomItemPrefab();
-                var item = GetRandomItem(itemPrefab);
-                item.Prepare(itemPrefab.GetInstanceID(), ReleaseItem);
-            }
+            CreateItems(itemsInfo, matchCount);
         }
 
         void OnValidate()
@@ -33,19 +29,18 @@ namespace Game.Gameplay.PlaygroundBase
             matchBoard.PlaceItem(item);
         }
 
-        Item GetRandomItemPrefab()
+        void CreateItems(ItemsInfo itemsInfo, int matchCount)
         {
-            return items[Random.Range(0, items.Length)];
-        }
+            var itemProvider = ServiceProvider.Get<ItemProvideManager>();
 
-        IItem GetRandomItem(Item itemPrefab)
-        {
-            return Instantiate(itemPrefab, GetRandomPosition(), Random.rotation, transform);
-        }
-
-        void ReleaseItem(IItem item)
-        {
-            Destroy((item as Item).gameObject);
+            foreach (var (info, count) in itemsInfo.ItemCounts)
+            {
+                for (int i = 0; i < count * matchCount; i++)
+                {
+                    var item = itemProvider.GetItem(info.ItemType, info);
+                    item.transform.SetPositionAndRotation(GetRandomPosition(), Random.rotation);
+                }
+            }
         }
 
         Vector3 GetRandomPosition()

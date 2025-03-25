@@ -7,11 +7,9 @@ namespace Game.Gameplay.Items
     {
         Transform transform { get; }
 
-        int ID { get; }
+        string ID { get; }
 
         bool MatchFlagged { get; set; }
-
-        void Prepare(int id, Action<IItem> disposer);
 
         void Dispose();
 

@@ -10,14 +10,14 @@ namespace Game.Gameplay.Items
         [SerializeField] Rigidbody rb;
         [SerializeField] Collider col;
 
-        int id;
-        Action<IItem> disposer;
+        string id;
+        Action<Item> disposer;
 
-        public int ID => id;
+        public string ID => id;
 
         public bool MatchFlagged { get; set; }
 
-        public void Prepare(int id, Action<IItem> disposer)
+        public void Prepare(string id, Action<Item> disposer)
         {
             this.id = id;
             this.disposer = disposer;
