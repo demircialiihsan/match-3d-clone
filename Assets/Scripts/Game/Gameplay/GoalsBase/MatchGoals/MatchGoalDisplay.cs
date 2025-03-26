@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Game.Gameplay.GoalsBase.MatchGoals
     public class MatchGoalDisplay : MonoBehaviour, IGoalDisplay
     {
         [SerializeField] Image itemImage;
-        [SerializeField] Text remainingCountText;
+        [SerializeField] TMP_Text remainingCountText;
 
         public void Prepare(GoalDisplayData displayData)
         {
