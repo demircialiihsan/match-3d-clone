@@ -7,7 +7,10 @@ namespace Game.Libraries.MatchItems
     public class MatchItemDataSO : ScriptableObject
     {
         [SerializeField] Item prefab;
+        [SerializeField] Sprite image;
 
         public Item Prefab => prefab;
+
+        public Sprite Image => image;
     }
 }

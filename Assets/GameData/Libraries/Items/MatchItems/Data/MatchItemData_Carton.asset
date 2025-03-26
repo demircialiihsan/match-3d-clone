@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: MatchItemData_Carton
   m_EditorClassIdentifier: 
   prefab: {fileID: 255095381807587874, guid: d3ea6a97897b5284fadd88127895c702, type: 3}
+  image: {fileID: 21300000, guid: b143c6b1d0661ee4e8fb500dfb0aabd4, type: 3}

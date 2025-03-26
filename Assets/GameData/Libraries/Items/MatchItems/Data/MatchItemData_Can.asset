@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: MatchItemData_Can
   m_EditorClassIdentifier: 
   prefab: {fileID: 255095381807587874, guid: 155c9f58b6d72c749afefacc7bf47399, type: 3}
+  image: {fileID: 21300000, guid: 84c4d5a614756ea4caeca6455db77d8b, type: 3}

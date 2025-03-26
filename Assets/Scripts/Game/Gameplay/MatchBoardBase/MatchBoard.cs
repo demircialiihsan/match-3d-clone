@@ -18,6 +18,8 @@ namespace Game.Gameplay.MatchBoardBase
         Dictionary<IItem, List<IItem>> matchFlaggedItems;
         int unmatchedItemCount;
 
+        public event Action<string> MatchItemCollected;
+
         void Start()
         {
             CreateCells(itemCapacity);
@@ -81,6 +83,8 @@ namespace Game.Gameplay.MatchBoardBase
 
             items.Insert(index, item);
             RepositionItems(index + 1);
+
+            MatchItemCollected?.Invoke(item.ID);
         }
 
         bool TryMatchFlagItems(IItem completingItem, int newItemIndex)
