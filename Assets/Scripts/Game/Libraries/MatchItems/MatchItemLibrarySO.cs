@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Game.Libraries.MatchItems
@@ -60,7 +61,9 @@ namespace Game.Libraries.MatchItems
                 if (item == null)
                     continue;
 
-                ids[i] = item.GetInstanceID().ToString();
+                var path = AssetDatabase.GetAssetPath(item);
+                if (!string.IsNullOrEmpty(path))
+                    ids[i] = AssetDatabase.AssetPathToGUID(path);
             }
         }
 #endif
